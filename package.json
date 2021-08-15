@@ -1,0 +1,25 @@
+{
+  "name": "adbssi",
+  "version": "1.0.0",
+  "description": "ADB shell screencap interface",
+  "main": "index.js",
+  "type": "module",
+  "repository": "https://github.com/dalirnet/adbssi.git",
+  "author": "Amir Reza Dalir <dalirnet@gmail.com>",
+  "license": "MIT",
+  "bin": {
+    "adbssi": "./cli.js"
+  },
+  "dependencies": {
+    "cross-spawn": "^7.0.3",
+    "yargs": "^17.1.1"
+  },
+  "keywords": [
+    "interface",
+    "android",
+    "adb",
+    "screencap",
+    "screenshot",
+    "cli"
+  ]
+}
