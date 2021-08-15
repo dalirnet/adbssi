@@ -1,6 +1,6 @@
 # adbssi
 
-[ADB](https://developer.android.com/studio/command-line/adb) shell [screencap](https://developer.android.com/studio/command-line/adb#screencap) interface
+[ADB](#) [s](#)hell [s](#)creencap [i](#)nterface
 
 ![carbon](carbon.png)
 
@@ -16,7 +16,11 @@ npm install -g adbssi
 adbssi screenshot.png
 ```
 
-### Requirement
+#### Requirement
 
--   [adb](https://adbdriver.com/downloads/) (Android Debug Bridge)
--   [node](https://nodejs.org/en/download/) (>=14)
+-   [adb](https://adbdriver.com/downloads/) (connected to device)
+-   [node](https://nodejs.org/en/download/) (version >=14)
+
+---
+
+[Android Debug Bridge](https://developer.android.com/studio/command-line/adb/) | [Screencap](https://developer.android.com/studio/command-line/adb#screencap)
