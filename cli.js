@@ -23,7 +23,19 @@ yargs(hideBin(process.argv))
         aliases: ['t'],
         desc: 'Take screenshot over ADB shell',
         handler: ({ filename, usb = false, tcp = false }) => {
-            ADBssi(filename, usb ? 'usb' : tcp ? 'tcp' : 'usb')
+            ADBssi(filename, usb ? 'usb' : tcp ? 'tcp' : 'auto')
+                .then((filePath) => {
+                    // filePath
+                })
+                .catch((tag) => {
+                    // tag
+                })
+                .finally(() => {
+                    console.log('\npress Enter to exit\n')
+                    process.stdin.once('data', () => {
+                        process.exit(0)
+                    })
+                })
         },
     })
     .example('$0 screenshot.png')

@@ -16,6 +16,30 @@ npm install -g adbssi
 adbssi screenshot.png
 ```
 
+### Module
+
+```js
+import ADBssi from "adbssi"
+
+/* valid ext
+    .png | .jpg | .gif
+*/
+const filename = "screenshot.png"
+
+/* valid type
+    usb | tcp | auto
+*/
+const connectionType = "usb"
+
+ADBssi(filename, connectionType)
+    .then((savedFilePath) => {
+        /*  savedFilePath */
+    })
+    .catch((errorTag) => {
+        /* errorTag */
+    })
+```
+
 #### Requirement
 
 -   [adb](https://adbdriver.com/downloads/) (connected to device)

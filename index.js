@@ -1,9 +1,11 @@
 import chalk from 'chalk'
 import spawn from 'cross-spawn'
-import { resolve, extname, basename } from 'path'
+import { resolve as pathResolve, extname, basename } from 'path'
 
 const log = (input) => {
-    console.log(chalk.gray('●'), input)
+    if (input) {
+        console.log(chalk.gray('●'), input)
+    }
 }
 
 const getDevice = (use) => {
@@ -14,7 +16,8 @@ const getDevice = (use) => {
         const command = spawn('adb', ['devices'])
         command.stdout.on('data', (output) => {
             devices = [...String(output).matchAll(/^([a-z0-9.:]+)\s+(device|bootloader|offline)$/gim)].reduce((keep, device) => {
-                if (use === (device[1].match(/[.:]/g) ? 'tcp' : 'usb') && device[2] === 'device') {
+                const type = device[1].match(/[.:]/g) ? 'tcp' : 'usb'
+                if ((use === 'auto' || use === type) && device[2] === 'device') {
                     keep.push(device[1])
                 }
 
@@ -95,36 +98,38 @@ const removeTemp = ({ device, path }) => {
     })
 }
 
-const ADBssi = (file = 'screenshot.png', use = 'usb') => {
-    const fileName = basename(file)
-    const fileType = extname(fileName)
-    const filePath = resolve(process.cwd(), file)
+const ADBssi = (file = 'screenshot.png', use = 'auto') => {
+    return new Promise((resolve, reject) => {
+        const fileName = basename(file)
+        const fileType = extname(fileName)
+        const filePath = pathResolve(process.cwd(), file)
 
-    if (!['.png', '.jpg', '.gif'].includes(fileType)) {
-        log(chalk.red('Invalid file type'))
-        return false
-    }
-
-    getDevice(use)
-        .then((device) => {
-            return takeScreenshot({ device, fileName })
-        })
-        .then(({ device, path }) => {
-            return downloadFile({ device, path, filePath })
-        })
-        .then(({ device, path }) => {
-            return removeTemp({ device, path })
-        })
-        .then(() => {
-            log(chalk.green('Save at ' + filePath))
-            log(chalk.bold('Press Enter to exit ...'))
-            process.stdin.once('data', () => {
-                process.exit(0)
-            })
-        })
-        .catch((tag) => {
+        if (!['.png', '.jpg', '.gif'].includes(fileType)) {
+            const tag = 'Invalid file type'
             log(chalk.red(tag))
-        })
+            reject(tag)
+            return false
+        }
+
+        getDevice(use)
+            .then((device) => {
+                return takeScreenshot({ device, fileName })
+            })
+            .then(({ device, path }) => {
+                return downloadFile({ device, path, filePath })
+            })
+            .then(({ device, path }) => {
+                return removeTemp({ device, path })
+            })
+            .then(() => {
+                log(chalk.green('Save at ' + filePath))
+                resolve(filePath)
+            })
+            .catch((tag) => {
+                log(chalk.red(tag))
+                reject(tag)
+            })
+    })
 }
 
 export default ADBssi
